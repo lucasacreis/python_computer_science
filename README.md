@@ -1,19 +1,19 @@
-# Curso Computação Científica com Python: Numpy, Matplotlib, Scipy e Pandas
+# Computational Science with Python Course: Numpy, Matplotlib, Scipy e Pandas
+This repository contains code with exercises worked on in the course taught by Professor Lazaro Camargo (INPE) in May 2025.
 
-Este repositório contém materiais e exemplos para o curso ministrado pelo Professor Lazaro Camargo (INPE).
+## Content
 
-## Conteúdo
-
-- Revisão da linguagem Python
-- Numpy e arrays
-- Matplotlib e gráficos
-- Scipy e funções básicas
-- Pandas - séries e dataframes
+- Numpy and arrays
+- Matplotlib and graphs
+- Scipy and basic functions
+- Pandas - series and dataframes
 - Cartopy
-- Projeto final
+- Final Project
+- ExtraProject: Satellite Status Reader
 
-## Como usar
+## How to use
 
-1. Clone este repositório.
-2. Siga as instruções em cada lição.
-3. Contribua com sugestões e melhorias!
+1. Clone this repository.
+2. For each exercise it's beeing created an input and them a match-case for the individual run.
+3. Read the code to study it.
+4. Contribute with sugestions and improvements!
