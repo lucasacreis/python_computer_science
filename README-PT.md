@@ -2,6 +2,8 @@
 
 Este repositório contém códigos com exercícios trabalhados no curso ministrado pelo Professor Lazaro Camargo (INPE) em maio de 2025.
 
+Feito por Lucas Reis.
+
 ## Conteúdo
 
 - Numpy e arrays

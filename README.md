@@ -1,6 +1,8 @@
 # Computational Science with Python Course: Numpy, Matplotlib, Scipy e Pandas
 This repository contains code with exercises worked on in the course taught by Professor Lazaro Camargo (INPE) in May 2025.
 
+Made by Lucas Reis.
+
 ## Content
 
 - Numpy and arrays
