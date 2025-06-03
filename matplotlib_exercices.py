@@ -1,7 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-n = 8
+while True:
+    try:
+        n = int(input('Digite o número do exercício: '))
+        if 0 <= n <= 17:
+            print(f'Você escolheu o exercício {n}.')
+            break
+        else:
+            raise ValueError('Número do exercício deve estar entre 0 e 17.')
+    except ValueError as e:
+        print(e)
 
 match n:
     case 0:
@@ -11,7 +20,7 @@ match n:
         c = np.cos(x)
         s = np.sin(x)
 
-        print('Exercício 1: Criar um array com np.linspace(-np.pi, np.pi, 256)')
+        print('Criar um array com np.linspace(-np.pi, np.pi, 256)')
         plt.plot(x, c, label='cos(x)')
         plt.plot(x, s, label='sin(x)')
         plt.title('Gráfico de cos(x) e sin(x)')
@@ -74,4 +83,12 @@ match n:
         plt.plot(range(5))
         plt.title('Exercicio ')
     
-plt.show()
+    case _:
+        print(f'Exercício {n} não implementado.')
+
+try:
+    plt.show()
+except Exception as e:
+    print(f'Erro ao exibir o gráfico: {e}')
+
+# End of the code
