@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
+import getpass
 
 while True:
     try:
@@ -33,7 +34,7 @@ url = "http://station/satelites/Satellite/communications/"
 url += str(sat_id) + "/?time_init="
 url += time_init + "&time_end=" + time_end + "&tipo=telemetrias&qtd_linhas=50"
 usuario = input("Digite o nome de usuário: ")
-senha = input("Digite a senha: ")
+senha = getpass.getpass("Digite a senha: ")
 
 # Cria uma sessão autenticada
 try:
