@@ -32,8 +32,8 @@ while True:
 url = "http://station/satelites/Satellite/communications/"
 url += str(sat_id) + "/?time_init="
 url += time_init + "&time_end=" + time_end + "&tipo=telemetrias&qtd_linhas=50"
-usuario = "admin"
-senha = "123456"
+usuario = input("Digite o nome de usuário: ")
+senha = input("Digite a senha: ")
 
 # Cria uma sessão autenticada
 try:
