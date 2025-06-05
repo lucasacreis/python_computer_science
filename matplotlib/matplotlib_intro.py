@@ -103,7 +103,7 @@ match n:
         # Salvar gráfico em arquivo
         plt.plot([1, 3, 2, 4], label='Linha 1')
         plt.title('Exercicio 14')
-        plt.savefig('figures/exercicio_14.png')
+        plt.savefig('matplotlib/figures/figure.png')
 
     case 15 | 16:
         # Efeito semelhante ao comando hold on do Matlab

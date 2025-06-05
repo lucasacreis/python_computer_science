@@ -6,3 +6,5 @@ cartopy
 requests
 bs4
 getpass4
+openpyxl
+seaborn

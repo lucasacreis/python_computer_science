@@ -1,3 +1,7 @@
+# May 2025 - Computer Science - Python - Prof. Dr. Lazaro Camargo
+# Numpy Arrays - Exercices 1 to 69
+# by Lucas Reis
+
 import numpy as np
 
 while True:
@@ -81,6 +85,28 @@ match n:
         except ValueError as e:
             print(f'Erro ao somar arrays de diferentes dimensões: {e}')
     # # # #
+
+    case 13:
+        # Iteração com Arrays
+        a = np.array([1, 2, 3, 4, 5])
+        print('Iteração com Arrays')
+        print('Elementos do array:')
+        for i in a:
+            print(i)
+    case 14:
+        # Iteração com Arrays 2D
+        a = np.array([[1, 2], [3, 4], [5, 6]])
+        print('Iteração com Arrays 2D')
+        print('Elementos do array:')
+        for i in a:
+            print(i)
+    case 15:
+        # Multiplicação de elementos do array 2D
+        a = np.array([[1, 2], [3, 4], [5, 6]])
+        print('Multipla atribuição com Arrays 2D')
+        print('Multiplicação dos elementos por linha:')
+        for (x,y) in a:
+            print(x*y)
     case 21:
         # Média
         a = np.array([[0, 2], [3, -1], [3, 5]], float)
@@ -122,3 +148,9 @@ match n:
         print(f'Array b: {b}')
         print(f'Igualdade: {a == b}')
         print(f'Menor igual: {a <= b}')
+    case _:
+        print('Exercício não implementado ou fora do intervalo especificado.')
+
+print('Fim do programa.')
+# Note: The code above is a partial implementation of the exercises.
+# You can continue adding cases for exercises 27 to 69 as needed.
