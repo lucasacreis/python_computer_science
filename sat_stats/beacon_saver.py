@@ -7,6 +7,11 @@ import pandas as pd
 
 from beacon_reader import BeaconDecoder
 
+"""
+Descrição...
+Melhorar organização de arquivos salvos.
+"""
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Decodifica e salva frames de satélite.")
     parser.add_argument('--sat_id', type=str, help='ID do satélite')
