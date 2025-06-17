@@ -138,7 +138,7 @@ def main():
             raise ValueError("Nenhum dado foi extraído da tabela.")
 
         # Organização das pastas: sat_stats/data/sat_<id>/<ano-mês>/
-        sat_folder = f"sat_stats/data/sat_{sat_id}"
+        sat_folder = f"data/sat_{sat_id}"
         year_month = time_init[:7]
         save_folder = os.path.join(sat_folder, year_month)
         os.makedirs(save_folder, exist_ok=True)
