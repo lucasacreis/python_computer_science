@@ -15,29 +15,29 @@ Melhorar organização de arquivos salvos.
 def parse_args():
     parser = argparse.ArgumentParser(description="Decodifica e salva frames de satélite.")
     parser.add_argument('--sat_id', type=str, help='ID do satélite')
-    parser.add_argument('--data_inicio', type=str, help='Data inicial (YYYY-MM-DD)')
-    parser.add_argument('--data_fim', type=str, help='Data final (YYYY-MM-DD)')
+    parser.add_argument('--time_init', type=str, help='Data inicial (YYYY-MM-DD)')
+    parser.add_argument('--time_end', type=str, help='Data final (YYYY-MM-DD)')
     args = parser.parse_args()
     return args
 
 def solicitar_dados_faltantes(args):
     if not args.sat_id:
         args.sat_id = input("Informe o ID do satélite: ")
-    if not args.data_inicio:
-        args.data_inicio = input("Informe a data inicial (YYYY-MM-DD): ")
-    if not args.data_fim:
-        args.data_fim = input("Informe a data final (YYYY-MM-DD): ")
+    if not args.time_init:
+        args.time_init = input("Informe a data inicial (YYYY-MM-DD): ")
+    if not args.time_end:
+        args.time_end = input("Informe a data final (YYYY-MM-DD): ")
     return args
 
-def buscar_arquivos(sat_id, data_inicio, data_fim):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    pasta_base = os.path.join(base_dir, "data", f"sat_{sat_id}")
-    data_ini = datetime.strptime(data_inicio, "%Y-%m-%d")
-    data_fim = datetime.strptime(data_fim, "%Y-%m-%d")
+def buscar_arquivos(sat_id, time_init, time_end):
+    # base_dir = os.path.dirname(os.path.abspath(__file__))
+    pasta_base = f"sat_stats/data/sat_{sat_id}"
+    data_ini = datetime.strptime(time_init, "%Y-%m-%d")
+    time_end = datetime.strptime(time_end, "%Y-%m-%d")
     arquivos = []
     meses = set()
     atual = data_ini.replace(day=1)
-    while atual <= data_fim:
+    while atual <= time_end:
         meses.add(atual.strftime("%Y-%m"))
         if atual.month == 12:
             atual = atual.replace(year=atual.year+1, month=1)
@@ -54,12 +54,12 @@ def buscar_arquivos(sat_id, data_inicio, data_fim):
                 arquivos.append(arq)
     return arquivos
 
-def processar_arquivos(arquivos, data_inicio, data_fim):
+def processar_arquivos(arquivos, time_init, time_end):
     resultados_dict = {}
-    data_ini = datetime.combine(datetime.strptime(data_inicio, "%Y-%m-%d").date(), time.min)
-    data_fim = datetime.combine(datetime.strptime(data_fim, "%Y-%m-%d").date(), time.max)
+    data_ini = datetime.combine(datetime.strptime(time_init, "%Y-%m-%d").date(), time.min)
+    time_end = datetime.combine(datetime.strptime(time_end, "%Y-%m-%d").date(), time.max)
     decoder = BeaconDecoder()
-    print(f"Processando {len(arquivos)} arquivos entre {data_ini} e {data_fim}...")
+    print(f"Processando {len(arquivos)} arquivos entre {data_ini} e {time_end}...")
     for arquivo in arquivos:
         try:
             df = pd.read_excel(arquivo)
@@ -74,8 +74,8 @@ def processar_arquivos(arquivos, data_inicio, data_fim):
             except Exception:
                 print(f"Erro ao converter timestamp: {row['timestamp']}")
                 continue
-            if not (data_ini <= timestamp <= data_fim):
-                # print(f"Timestamp {timestamp} fora do intervalo {data_inicio} a {data_fim}. Ignorando.")
+            if not (data_ini <= timestamp <= time_end):
+                # print(f"Timestamp {timestamp} fora do intervalo {time_init} a {time_end}. Ignorando.")
                 continue
             frame = str(row['telemetria'])
             chave = (str(timestamp), frame)
@@ -90,12 +90,14 @@ def processar_arquivos(arquivos, data_inicio, data_fim):
     # Retorna apenas os valores únicos
     return list(resultados_dict.values())
 
-def salvar_json(sat_id, data_inicio, data_fim, resultados):
-    print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {data_inicio} a {data_fim}...")
-    pasta_saida = f"sat_stats/stats/sat_{sat_id}"
-    os.makedirs(pasta_saida, exist_ok=True)
-    nome_arquivo = f"stats_{sat_id}_{data_inicio}_{data_fim}.json"
-    caminho = os.path.join(pasta_saida, nome_arquivo)
+def salvar_json(sat_id, time_init, time_end, resultados):
+    print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
+    sat_folder = f"sat_stats/data/sat_{sat_id}"
+    year_month = time_init[:7]
+    save_folder = os.path.join(sat_folder, year_month, 'status')
+    os.makedirs(save_folder, exist_ok=True)
+    nome_arquivo = f"stats_{sat_id}_{time_init}_{time_end}.json"
+    caminho = os.path.join(save_folder, nome_arquivo)
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(resultados, f, indent=2, ensure_ascii=False)
     print(f"Resultados salvos em {caminho}")
@@ -103,12 +105,12 @@ def salvar_json(sat_id, data_inicio, data_fim, resultados):
 if __name__ == "__main__":
     args = parse_args()
     args = solicitar_dados_faltantes(args)
-    arquivos = buscar_arquivos(args.sat_id, args.data_inicio, args.data_fim)
+    arquivos = buscar_arquivos(args.sat_id, args.time_init, args.time_end)
     if not arquivos:
         print("Nenhum arquivo encontrado para os parâmetros informados.")
         exit(1)
-    resultados = processar_arquivos(arquivos, args.data_inicio, args.data_fim)
+    resultados = processar_arquivos(arquivos, args.time_init, args.time_end)
     if not resultados:
         print("Nenhum frame encontrado no intervalo informado.")
         exit(1)
-    salvar_json(args.sat_id, args.data_inicio, args.data_fim, resultados)
+    salvar_json(args.sat_id, args.time_init, args.time_end, resultados)

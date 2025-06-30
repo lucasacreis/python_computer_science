@@ -137,10 +137,10 @@ def main():
         if df.empty:
             raise ValueError("Nenhum dado foi extraído da tabela.")
 
-        # Organização das pastas: sat_stats/data/sat_<id>/<ano-mês>/
-        sat_folder = f"data/sat_{sat_id}"
+        # Organização das pastas: os.path/data/sat_<id>/<ano-mês>/telemetry
+        sat_folder = f"sat_stats/data/sat_{sat_id}/"
         year_month = time_init[:7]
-        save_folder = os.path.join(sat_folder, year_month)
+        save_folder = os.path.join(sat_folder, year_month, 'telemetry')
         os.makedirs(save_folder, exist_ok=True)
 
         # Salva o DataFrame em um arquivo Excel: <daata_inicial>_to_<data_final>_sat-<id>-telemetr.xlsx

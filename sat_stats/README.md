@@ -23,21 +23,21 @@ Under construction...
 ```tree
 sat_stats/
 ├── data/
-│   └── sat-19/
-│       └── 2025-05/
+│   └── sat-<id>/
+│       └── <Year-month>/
 │           ├── telemetry/
-│           │   └── 2025-05-01_2025-05-31_sat-19_telemetry.xlsx
+│           │   └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_telemetry.xlsx
 │           ├── status/
-│           │   └── 2025-05-01_2025-05-31_sat-19_status.json
+│           │   └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_status.json
 │           ├── graphs/
-│           │   ├── 2025-05-01_2025-05-31_sat-19_graph_crc.png
-│           │   ├── 2025-05-01_2025-05-31_sat-19_graph_handshakes.png
-│           │   ├── 2025-05-01_2025-05-31_sat-19_graph_mcu-temp.png
-│           │   ├── 2025-05-01_2025-05-31_sat-19_graph_memory.png
-│           │   ├── 2025-05-01_2025-05-31_sat-19_graph_packets.png
-│           │   └── 2025-05-01_2025-05-31_sat-19_graph_por.png
+│           │   ├── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_crc.png
+│           │   ├── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_handshakes.png
+│           │   ├── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_mcu-temp.png
+│           │   ├── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_memory.png
+│           │   ├── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_packets.png
+│           │   └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_por.png
 │           └── report/
-│               └── 2025-05-01_2025-05-31_sat-19_report.png
+│               └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_report.png
 └── lib/
     ├── collect_data.py
     ├── beacon_reader.py
