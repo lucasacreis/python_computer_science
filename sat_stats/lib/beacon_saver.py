@@ -8,11 +8,23 @@ import pandas as pd
 from beacon_reader import BeaconDecoder
 
 """
-Descrição...
-Melhorar organização de arquivos salvos.
+===================================================================================================
+                Salvar dados de beacons de satélites EMMN INPE - Versão: 1.0
+                Data: 2025-06-06 - por Lucas Reis                    
+===================================================================================================
+Este script coleta telemetrias salvas de beacons de satélites e as organiza em um arquivo JSON.
+Ele permite que o usuário especifique o ID do satélite e o intervalo de datas para busca.
+O script pesquisa dados de excel salvos referentes ao intervalo de datas para busca, realiza a 
+decodificação dos beacons e salva os resultados em um arquivo JSON.
+===================================================================================================
+Uso:
+python beacon_saver.py --sat_id <ID_DO_SATÉLITE> --time_init <DATA_INICIAL> --time_end <DATA_FINAL>
+Ou, se os argumentos não forem passados, o usuário será solicitado a inseri-los interativamente.
+===================================================================================================
 """
 
 def parse_args():
+    # ArgumentParser para coletar argumentos da linha de comando - Id do satélite e intervalo de datas
     parser = argparse.ArgumentParser(description="Decodifica e salva frames de satélite.")
     parser.add_argument('--sat_id', type=str, help='ID do satélite')
     parser.add_argument('--time_init', type=str, help='Data inicial (YYYY-MM-DD)')
@@ -20,20 +32,43 @@ def parse_args():
     args = parser.parse_args()
     return args
 
-def solicitar_dados_faltantes(args):
+def get_user_inputs(args):
     if not args.sat_id:
-        args.sat_id = input("Informe o ID do satélite: ")
+        while True:
+            try:
+                args.sat_id = input("Digite o ID do satélite: ")
+                if not args.sat_id.isdigit():
+                    raise ValueError("O ID do satélite deve ser um número inteiro.")
+                args.sat_id = int(args.sat_id)
+                break
+            except ValueError as e:
+                print(f"Erro: {e}. Por favor, tente novamente.")
+                continue
     if not args.time_init:
-        args.time_init = input("Informe a data inicial (YYYY-MM-DD): ")
+        while True:
+            try:
+                args.time_init = input("Digite a data inicial (YYYY-MM-DD): ")
+                pd.to_datetime(args.time_init, format='%Y-%m-%d')
+                break
+            except ValueError:
+                print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
+                continue
     if not args.time_end:
-        args.time_end = input("Informe a data final (YYYY-MM-DD): ")
+        while True:
+            try:
+                args.time_end = input("Informe a data final (YYYY-MM-DD): ")
+                pd.to_datetime(args.time_end, format='%Y-%m-%d')
+                break
+            except ValueError:
+                print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
+                continue
     return args
 
-def buscar_arquivos(sat_id, time_init, time_end):
+def search_files(args):
     # base_dir = os.path.dirname(os.path.abspath(__file__))
-    pasta_base = f"sat_stats/data/sat_{sat_id}"
-    data_ini = datetime.strptime(time_init, "%Y-%m-%d")
-    time_end = datetime.strptime(time_end, "%Y-%m-%d")
+    pasta_base = f"sat_stats/data/sat_{args.sat_id}"
+    data_ini = datetime.strptime(args.time_init, "%Y-%m-%d")
+    time_end = datetime.strptime(args.time_end, "%Y-%m-%d")
     arquivos = []
     meses = set()
     atual = data_ini.replace(day=1)
@@ -45,7 +80,7 @@ def buscar_arquivos(sat_id, time_init, time_end):
             atual = atual.replace(month=atual.month+1)
     # print(f"Buscando arquivos em: {pasta_base} para os meses: {', '.join(sorted(meses))}")
     for ano_mes in meses:
-        pasta = os.path.join(pasta_base, ano_mes)
+        pasta = os.path.join(pasta_base, ano_mes, 'telemetry')
         print(f"Verificando pasta: {os.path.abspath(pasta)}")
         if os.path.exists(pasta):
             # print(f"Encontrando arquivos em: {pasta}")
@@ -56,10 +91,10 @@ def buscar_arquivos(sat_id, time_init, time_end):
 
 def processar_arquivos(arquivos, time_init, time_end):
     resultados_dict = {}
-    data_ini = datetime.combine(datetime.strptime(time_init, "%Y-%m-%d").date(), time.min)
+    time_init = datetime.combine(datetime.strptime(time_init, "%Y-%m-%d").date(), time.min)
     time_end = datetime.combine(datetime.strptime(time_end, "%Y-%m-%d").date(), time.max)
     decoder = BeaconDecoder()
-    print(f"Processando {len(arquivos)} arquivos entre {data_ini} e {time_end}...")
+    print(f"Processando {len(arquivos)} arquivos entre {time_init} e {time_end}...")
     for arquivo in arquivos:
         try:
             df = pd.read_excel(arquivo)
@@ -74,7 +109,7 @@ def processar_arquivos(arquivos, time_init, time_end):
             except Exception:
                 print(f"Erro ao converter timestamp: {row['timestamp']}")
                 continue
-            if not (data_ini <= timestamp <= time_end):
+            if not (time_init <= timestamp <= time_end):
                 # print(f"Timestamp {timestamp} fora do intervalo {time_init} a {time_end}. Ignorando.")
                 continue
             frame = str(row['telemetria'])
@@ -90,7 +125,7 @@ def processar_arquivos(arquivos, time_init, time_end):
     # Retorna apenas os valores únicos
     return list(resultados_dict.values())
 
-def salvar_json(sat_id, time_init, time_end, resultados):
+def save_json(sat_id, time_init, time_end, resultados):
     print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
     sat_folder = f"sat_stats/data/sat_{sat_id}"
     year_month = time_init[:7]
@@ -104,8 +139,8 @@ def salvar_json(sat_id, time_init, time_end, resultados):
 
 if __name__ == "__main__":
     args = parse_args()
-    args = solicitar_dados_faltantes(args)
-    arquivos = buscar_arquivos(args.sat_id, args.time_init, args.time_end)
+    args = get_user_inputs(args)
+    arquivos = search_files(args)
     if not arquivos:
         print("Nenhum arquivo encontrado para os parâmetros informados.")
         exit(1)
@@ -113,4 +148,4 @@ if __name__ == "__main__":
     if not resultados:
         print("Nenhum frame encontrado no intervalo informado.")
         exit(1)
-    salvar_json(args.sat_id, args.time_init, args.time_end, resultados)
+    save_json(args.sat_id, args.time_init, args.time_end, resultados)

@@ -30,48 +30,45 @@ def get_args():
     args = parser.parse_args()
     return args
 
-def get_user_inputs():
-    while True:
-        try:
-            sat_id = input("Digite o ID do satélite: ")
-            if not sat_id.isdigit():
-                raise ValueError("O ID do satélite deve ser um número inteiro.")
-            sat_id = int(sat_id)
-            break
-        except ValueError as e:
-            print(f"Erro: {e}. Por favor, tente novamente.")
-            continue
-
-    while True:
-        try:
-            time_init = input("Digite a data inicial (YYYY-MM-DD): ")
-            time_end = input("Digite a data final (YYYY-MM-DD): ")
-            pd.to_datetime(time_init, format='%Y-%m-%d')
-            pd.to_datetime(time_end, format='%Y-%m-%d')
-            break
-        except ValueError:
-            print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
-            continue
-    return sat_id, time_init, time_end
+def get_user_inputs(args):
+    if not args.sat_id:
+        while True:
+            try:
+                args.sat_id = input("Digite o ID do satélite: ")
+                if not args.sat_id.isdigit():
+                    raise ValueError("O ID do satélite deve ser um número inteiro.")
+                args.sat_id = int(args.sat_id)
+                break
+            except ValueError as e:
+                print(f"Erro: {e}. Por favor, tente novamente.")
+                continue
+    if not args.time_init:
+        while True:
+            try:
+                args.time_init = input("Digite a data inicial (YYYY-MM-DD): ")
+                pd.to_datetime(args.time_init, format='%Y-%m-%d')
+                break
+            except ValueError:
+                print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
+                continue
+    if not args.time_end:
+        while True:
+            try:
+                args.time_end = input("Informe a data final (YYYY-MM-DD): ")
+                pd.to_datetime(args.time_end, format='%Y-%m-%d')
+                break
+            except ValueError:
+                print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
+                continue
+    return args
 
 def main():
     args = get_args()
     # Se argumentos não foram passados, usa input interativo
-    if args.sat_id and args.time_init and args.time_end:
-        sat_id = args.sat_id
-        time_init = args.time_init
-        time_end = args.time_end
-        # Validação das datas
-        try:
-            pd.to_datetime(time_init, format='%Y-%m-%d')
-            pd.to_datetime(time_end, format='%Y-%m-%d')
-        except ValueError:
-            print("Formato de data inválido. Por favor, use o formato YYYY-MM-DD.")
-            sys.exit(1)
-    else:
-        # Coleta de dados interativamente caso falte algum argumento
-        sat_id, time_init, time_end = get_user_inputs()
-
+    args = get_user_inputs(args)
+    sat_id = args.sat_id
+    time_init = args.time_init
+    time_end = args.time_end
     url = f"http://station/satelites/Satellite/communications/{sat_id}/?time_init={time_init}&time_end={time_end}&tipo=telemetrias&qtd_linhas=50"
     usuario = input("Digite o nome de usuário: ")
     senha = getpass.getpass("Digite a senha: ")
