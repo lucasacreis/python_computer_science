@@ -3,6 +3,7 @@
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+from ultils import get_args, get_user_inputs
 
 # === 1. Carregar JSON ===
 with open("sat_stats/stats/sat_19/stats_19_2025-05-01_2025-05-31.json", "r") as f:
@@ -100,3 +101,7 @@ plt.xlabel("Timestamp")
 plt.ylabel("Contagem")
 plt.tight_layout()
 plt.savefig("grafico_handshakes.png")
+
+if __name__ == "__main__":
+    args = get_args()
+    args = get_user_inputs(args)
