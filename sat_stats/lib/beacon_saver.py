@@ -3,7 +3,7 @@ import glob
 import json
 from datetime import datetime, time
 import pandas as pd
-from ultils import get_args, get_user_inputs
+from ultils import get_args, get_user_inputs, search_files
 from beacon_reader import BeaconDecoder
 
 """
@@ -22,35 +22,40 @@ Ou, se os argumentos não forem passados, o usuário será solicitado a inseri-l
 ===================================================================================================
 """
 
-def search_files(args):
-    # base_dir = os.path.dirname(os.path.abspath(__file__))
-    pasta_base = f"sat_stats/data/sat_{args.sat_id}"
-    data_ini = datetime.strptime(args.time_init, "%Y-%m-%d")
-    time_end = datetime.strptime(args.time_end, "%Y-%m-%d")
-    arquivos = []
-    meses = set()
-    atual = data_ini.replace(day=1)
-    while atual <= time_end:
-        meses.add(atual.strftime("%Y-%m"))
-        if atual.month == 12:
-            atual = atual.replace(year=atual.year+1, month=1)
-        else:
-            atual = atual.replace(month=atual.month+1)
-    # print(f"Buscando arquivos em: {pasta_base} para os meses: {', '.join(sorted(meses))}")
-    for ano_mes in meses:
-        pasta = os.path.join(pasta_base, ano_mes, 'telemetry')
-        print(f"Verificando pasta: {os.path.abspath(pasta)}")
-        if os.path.exists(pasta):
-            # print(f"Encontrando arquivos em: {pasta}")
-            for arq in glob.glob(os.path.join(pasta, "*.xlsx")):
-                # print(f"Arquivo encontrado: {arq}")
-                arquivos.append(arq)
-    return arquivos
+def save_json(sat_id, time_init, time_end, resultados):
+    print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
+    sat_folder = f"sat_stats/data/sat_{sat_id}"
+    year_month = time_init[:7]
+    save_folder = os.path.join(sat_folder, year_month, 'status')
+    os.makedirs(save_folder, exist_ok=True)
+    nome_arquivo = f"stats_{sat_id}_{time_init}_{time_end}.json"
+    caminho = os.path.join(save_folder, nome_arquivo)
+    with open(caminho, "w", encoding="utf-8") as f:
+        json.dump(resultados, f, indent=2, ensure_ascii=False)
+    print(f"Resultados salvos em {caminho}")
 
-def processar_arquivos(arquivos, time_init, time_end):
+
+if __name__ == "__main__":
+    # Checagem de argumentos
+    args = get_args()
+
+    # Se argumentos não foram passados, usa input interativo
+    args = get_user_inputs(args)
+    time_init = args.time_init
+    time_end = args.time_end
+
+    # Procura arquivos de telemetria
+    arquivos = search_files(args, 'telemetry', 'xlsx')
+    if not arquivos:
+        print("Nenhum arquivo encontrado para os parâmetros informados.")
+        exit(1)
+    
+    # Processamento dos arquivos encontrados
     resultados_dict = {}
     time_init = datetime.combine(datetime.strptime(time_init, "%Y-%m-%d").date(), time.min)
     time_end = datetime.combine(datetime.strptime(time_end, "%Y-%m-%d").date(), time.max)
+    
+    # Inicializa o decodificador de beacons
     decoder = BeaconDecoder()
     print(f"Processando {len(arquivos)} arquivos entre {time_init} e {time_end}...")
     for arquivo in arquivos:
@@ -80,29 +85,9 @@ def processar_arquivos(arquivos, time_init, time_end):
                 "frame": frame,
                 "decoded": decoded
             }
-    # Retorna apenas os valores únicos
-    return list(resultados_dict.values())
+    # Seleciona apenas os valores únicos
+    resultados = list(resultados_dict.values())
 
-def save_json(sat_id, time_init, time_end, resultados):
-    print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
-    sat_folder = f"sat_stats/data/sat_{sat_id}"
-    year_month = time_init[:7]
-    save_folder = os.path.join(sat_folder, year_month, 'status')
-    os.makedirs(save_folder, exist_ok=True)
-    nome_arquivo = f"stats_{sat_id}_{time_init}_{time_end}.json"
-    caminho = os.path.join(save_folder, nome_arquivo)
-    with open(caminho, "w", encoding="utf-8") as f:
-        json.dump(resultados, f, indent=2, ensure_ascii=False)
-    print(f"Resultados salvos em {caminho}")
-
-if __name__ == "__main__":
-    args = get_args()
-    args = get_user_inputs(args)
-    arquivos = search_files(args)
-    if not arquivos:
-        print("Nenhum arquivo encontrado para os parâmetros informados.")
-        exit(1)
-    resultados = processar_arquivos(arquivos, args.time_init, args.time_end)
     if not resultados:
         print("Nenhum frame encontrado no intervalo informado.")
         exit(1)

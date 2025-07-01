@@ -21,7 +21,8 @@ Ou, se os argumentos não forem passados, o usuário será solicitado a inseri-l
 ===================================================================================================
 """
 
-def main():
+if __name__ == "__main__":
+    # Checagem de argumentos
     args = get_args()
     # Se argumentos não foram passados, usa input interativo
     args = get_user_inputs(args)
@@ -115,6 +116,3 @@ def main():
     except Exception as e:
         print(f"Erro ao exibir o DataFrame: {e}")
         sys.exit(1)
-
-if __name__ == "__main__":
-    main()
