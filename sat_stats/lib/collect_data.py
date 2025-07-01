@@ -4,7 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import getpass
 import sys
-from ultils import get_args, get_user_inputs
+from utils import get_args, get_user_inputs
 
 """
 ===================================================================================================

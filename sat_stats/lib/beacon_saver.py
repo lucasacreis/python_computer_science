@@ -3,7 +3,7 @@ import glob
 import json
 from datetime import datetime, time
 import pandas as pd
-from ultils import get_args, get_user_inputs, search_files
+from utils import get_args, get_user_inputs, search_files
 from beacon_reader import BeaconDecoder
 
 """
