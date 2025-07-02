@@ -27,7 +27,7 @@ def save_json(sat_id, time_init, time_end, resultados):
     year_month = time_init[:7]
     save_folder = os.path.join(sat_folder, year_month, 'status')
     os.makedirs(save_folder, exist_ok=True)
-    nome_arquivo = f"stats_{sat_id}_{time_init}_{time_end}.json"
+    nome_arquivo = f"{time_init}_{time_end}_sat-{sat_id}_status.json"
     caminho = os.path.join(save_folder, nome_arquivo)
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(resultados, f, indent=2, ensure_ascii=False)
