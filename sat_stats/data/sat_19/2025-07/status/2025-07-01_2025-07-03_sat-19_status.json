@@ -1,0 +1,10 @@
+[
+  {
+    "timestamp": "2025-07-02 17:37:04",
+    "frame": "A4E765768495ED38D24E19541A06778FAC74B2E6CE84BC0BC5837340C23650A56CD646B0064775F1A34C9DAD",
+    "decoded": {
+      "type": "00",
+      "content": "b'\\xce\\x84\\xbc\\x0b\\xc5\\x83s@\\xc26P\\xa5l\\xd6F\\xb0\\x06Gu\\xf1\\xa3L\\x9d\\xad'"
+    }
+  }
+]

@@ -1,8 +1,6 @@
-import os
-import json
 from datetime import datetime, time
 import pandas as pd
-from utils import get_args, get_user_inputs, search_files
+from utils import get_args, get_user_inputs, search_files, save_json
 from beacon_reader import BeaconDecoder
 
 """
@@ -21,73 +19,67 @@ Ou, se os argumentos não forem passados, o usuário será solicitado a inseri-l
 ===================================================================================================
 """
 
-def save_json(sat_id, time_init, time_end, resultados):
-    print(f"Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
-    sat_folder = f"sat_stats/data/sat_{sat_id}"
-    year_month = time_init[:7]
-    save_folder = os.path.join(sat_folder, year_month, 'status')
-    os.makedirs(save_folder, exist_ok=True)
-    nome_arquivo = f"{time_init}_{time_end}_sat-{sat_id}_status.json"
-    caminho = os.path.join(save_folder, nome_arquivo)
-    with open(caminho, "w", encoding="utf-8") as f:
-        json.dump(resultados, f, indent=2, ensure_ascii=False)
-    print(f"Resultados salvos em {caminho}")
+class BeaconSaver:
+    def __init__(self, get_args, get_user_inputs):
+        # Checagem de argumentos
+        self.get_args = get_args
+        # Se argumentos não foram passados, usa input interativo
+        self.get_user_inputs = get_user_inputs
+
+        self.sat_id = self.args.sat_id
+        self.time_init = self.args.time_init
+        self.time_end = self.args.time_end
+
+    def run(self):
+        # Procura arquivos de telemetria
+        arquivos = search_files(self.args, 'telemetry', 'xlsx')
+        if not arquivos:
+            print("Nenhum arquivo encontrado para os parâmetros informados.")
+            exit(1)
+        
+        # Processamento dos arquivos encontrados
+        resultados_dict = {}
+        time_init = datetime.combine(datetime.strptime(self.time_init, "%Y-%m-%d").date(), time.min)
+        time_end = datetime.combine(datetime.strptime(self.time_end, "%Y-%m-%d").date(), time.max)
+
+        # Inicializa o decodificador de beacons
+        decoder = BeaconDecoder()
+        print(f"Processando {len(arquivos)} arquivos entre {time_init} e {time_end}...")
+        for arquivo in arquivos:
+            try:
+                df = pd.read_excel(arquivo)
+                # print(f"Lendo arquivo: {arquivo}")
+            except Exception as e:
+                print(f"Erro ao ler {arquivo}: {e}")
+                continue
+            for _, row in df.iterrows():
+                try:
+                    timestamp = pd.to_datetime(row['timestamp'], dayfirst=True)
+                    # print(f"Processando timestamp: {timestamp}")
+                except Exception:
+                    print(f"Erro ao converter timestamp: {row['timestamp']}")
+                    continue
+                if not (time_init <= timestamp <= time_end):
+                    # print(f"Timestamp {timestamp} fora do intervalo {time_init} a {time_end}. Ignorando.")
+                    continue
+                frame = str(row['telemetria'])
+                chave = (str(timestamp), frame)
+                if chave in resultados_dict:
+                    continue  # Dados são ignorados se já foram processados
+                decoded = decoder.decode(frame)
+                resultados_dict[chave] = {
+                    "timestamp": str(timestamp),
+                    "frame": frame,
+                    "decoded": decoded
+                }
+        # Seleciona apenas os valores únicos
+        resultados = list(resultados_dict.values())
+
+        if not resultados:
+            print("Nenhum frame encontrado no intervalo informado.")
+            exit(1)
+        save_json(self.args, resultados)
 
 
 if __name__ == "__main__":
-    # Checagem de argumentos
-    args = get_args()
-
-    # Se argumentos não foram passados, usa input interativo
-    args = get_user_inputs(args)
-    time_init = args.time_init
-    time_end = args.time_end
-
-    # Procura arquivos de telemetria
-    arquivos = search_files(args, 'telemetry', 'xlsx')
-    if not arquivos:
-        print("Nenhum arquivo encontrado para os parâmetros informados.")
-        exit(1)
-    
-    # Processamento dos arquivos encontrados
-    resultados_dict = {}
-    time_init = datetime.combine(datetime.strptime(time_init, "%Y-%m-%d").date(), time.min)
-    time_end = datetime.combine(datetime.strptime(time_end, "%Y-%m-%d").date(), time.max)
-    
-    # Inicializa o decodificador de beacons
-    decoder = BeaconDecoder()
-    print(f"Processando {len(arquivos)} arquivos entre {time_init} e {time_end}...")
-    for arquivo in arquivos:
-        try:
-            df = pd.read_excel(arquivo)
-            # print(f"Lendo arquivo: {arquivo}")
-        except Exception as e:
-            print(f"Erro ao ler {arquivo}: {e}")
-            continue
-        for _, row in df.iterrows():
-            try:
-                timestamp = pd.to_datetime(row['timestamp'], dayfirst=True)
-                # print(f"Processando timestamp: {timestamp}")
-            except Exception:
-                print(f"Erro ao converter timestamp: {row['timestamp']}")
-                continue
-            if not (time_init <= timestamp <= time_end):
-                # print(f"Timestamp {timestamp} fora do intervalo {time_init} a {time_end}. Ignorando.")
-                continue
-            frame = str(row['telemetria'])
-            chave = (str(timestamp), frame)
-            if chave in resultados_dict:
-                continue  # Dados são ignorados se já foram processados
-            decoded = decoder.decode(frame)
-            resultados_dict[chave] = {
-                "timestamp": str(timestamp),
-                "frame": frame,
-                "decoded": decoded
-            }
-    # Seleciona apenas os valores únicos
-    resultados = list(resultados_dict.values())
-
-    if not resultados:
-        print("Nenhum frame encontrado no intervalo informado.")
-        exit(1)
-    save_json(args.sat_id, args.time_init, args.time_end, resultados)
+    BeaconSaver()
