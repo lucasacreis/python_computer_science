@@ -231,6 +231,9 @@ class satellite_data:
 
             df["CRC_Error_Rate"] = 100 * df["RxPackets_CrcErr"] / df["Rx_Packets"]
 
+            # Ordena o DataFrame por timestamp
+            df = df.sort_values('timestamp').reset_index(drop=True)
+
             # === 3. Plotar gráficos ===
             plt.style.use("seaborn-v0_8-darkgrid")
 
@@ -317,6 +320,9 @@ class satellite_data:
                 "ExtFRAM_corruptions": b["decoded"].get("ExtFRAM_corruptions"),
                 "ExtFRAM_gone": b["decoded"].get("ExtFRAM_gone"),
             } for b in debug_data])
+
+            # Ordena o DataFrame por timestamp
+            df_debug = df_debug.sort_values('timestamp').reset_index(drop=True)
 
             # === 5. Plotar gráficos para debug ===
 
