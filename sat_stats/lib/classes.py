@@ -26,6 +26,13 @@ class satellite_data:
 
     
     def collect_data(self):
+        """
+        ===================================================================================================
+        Coleta dados de telemetria de satélites a partir do API station da EMMN INPE.
+        O script autentica o usuário, faz a requisição dos dados e salva os resultados em um arquivo Excel.
+        ===================================================================================================
+        """
+
         # Define a URL para coletar os dados de telemetria
         url = f"http://station/satelites/Satellite/communications/{self.sat_id}/?time_init={self.time_init}&time_end={self.time_end}&tipo=telemetrias&qtd_linhas=50"
         usuario = input("=> Digite o nome de usuário: ")
@@ -126,6 +133,14 @@ class satellite_data:
 
 
     def beacon_saver(self):
+        """
+        ===================================================================================================
+        Coleta telemetrias salvas de beacons de satélites e as organiza em um arquivo JSON.
+        O script pesquisa dados de excel salvos referentes ao intervalo de datas para busca, realiza a 
+        decodificação dos beacons e salva os resultados em um arquivo JSON.
+        ===================================================================================================
+        """
+
         print("===========================================================================================")
         print(f"============         PROCESSANDO DADOS DE TELEMETRIA DO SATÉLITE {self.sat_id}            ============")
         print("===========================================================================================")
@@ -180,6 +195,14 @@ class satellite_data:
         self.save_json(self.args, resultados)
 
     def graph_builder(self):
+        """
+        =======================================================================================================
+        Coleta dados de beacons de satélites salvos e gera gráficos a partir desses dados.
+        O script pesquisa dados de JSON salvos referentes ao intervalo de datas para busca, gera gráficos
+        e salva-os em arquivos PNG.
+        =======================================================================================================
+        """
+
         print("===========================================================================================")
         print(f"============                 GERANDO GRÁFICOS DO SATÉLITE {self.sat_id}                   ============")
         print("===========================================================================================")
@@ -223,7 +246,7 @@ class satellite_data:
             if not uhf_stats:
                 print("=> Nenhum dado do tipo 02 (UHF Stats) encontrado.")
                 continue
-            
+
             # Criar DataFrame
             df = pd.DataFrame([{
                 "timestamp": pd.to_datetime(b["timestamp"]),
