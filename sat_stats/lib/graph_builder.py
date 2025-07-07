@@ -139,6 +139,10 @@ if __name__ == "__main__":
 
         # === 4. Filtrar e preparar dados de tipo 03 (Debug) ===
         debug_data = [b for b in beacons if b["decoded"].get("type") == "03"]
+        print(f"Número de beacons do tipo 03 (Debug): {len(debug_data)}")
+        if not debug_data:
+            print("Nenhum dado do tipo 03 (Debug) encontrado.")
+            continue
 
         df_debug = pd.DataFrame([{
             "timestamp": pd.to_datetime(b["timestamp"]),

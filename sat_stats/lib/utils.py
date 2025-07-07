@@ -68,7 +68,7 @@ def get_user_inputs(args):
 def search_files(args, tipo, extensao):
     try:
         # base_dir = os.path.dirname(os.path.abspath(__file__))
-        pasta_base = f"sat_stats/data/sat_{args.sat_id}"
+        pasta_base = f"data/sat_{args.sat_id}"
         data_ini = datetime.strptime(args.time_init, "%Y-%m-%d")
         time_end = datetime.strptime(args.time_end, "%Y-%m-%d")
         arquivos = []
@@ -102,7 +102,7 @@ def save_json(args, resultados):
     time_end = args.time_end
     print("===========================================================================================")
     print(f"=> Salvando {len(resultados)} resultados de telemetria para o satélite {sat_id} de {time_init} a {time_end}...")
-    sat_folder = f"sat_stats/data/sat_{sat_id}"
+    sat_folder = f"data/sat_{sat_id}"
     year_month = time_init[:7]
     save_folder = os.path.join(sat_folder, year_month, 'status')
     os.makedirs(save_folder, exist_ok=True)

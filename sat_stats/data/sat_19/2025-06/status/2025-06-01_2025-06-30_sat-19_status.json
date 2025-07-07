@@ -1,5 +1,232 @@
 [
   {
+    "timestamp": "2025-06-27 18:14:21",
+    "frame": "D0EF4B7AA1B78D1832D274",
+    "decoded": {
+      "type": "00",
+      "content": ""
+    }
+  },
+  {
+    "timestamp": "2025-06-17 17:46:50",
+    "frame": "00C1A0B3541AA714DEB80650D4DA3B",
+    "decoded": {
+      "type": "00",
+      "content": ""
+    }
+  },
+  {
+    "timestamp": "2025-06-16 17:08:50",
+    "frame": "C05B41011DE08C3E6836C254045D2E35CB34B042",
+    "decoded": {
+      "type": "00",
+      "content": ""
+    }
+  },
+  {
+    "timestamp": "2025-06-13 17:08:31",
+    "frame": "8AA68EA66062E0A6A664626862E103F0151101834332A9E7D2220000000000000000000081AA05000000000000000000210000000000000001000000D2220000",
+    "decoded": {
+      "type": "03",
+      "ConOpsMode": "E7A9",
+      "POR": 8914,
+      "MAC_Collisions": 0,
+      "MAC_fails": 0,
+      "GS_Handshakes": 371329,
+      "NvMWriteFails": 0,
+      "NvMReadFails": 0,
+      "NvMDefaultEntry": 33,
+      "IntFRAM_corruptions": 0,
+      "ExtFRAM_corruptions": 1,
+      "ExtFRAM_gone": 8914
+    }
+  },
+  {
+    "timestamp": "2025-06-13 17:08:31",
+    "frame": "8AA68EA66062E0A6A664626862E103F014110182433274040000D6FF000008F20000888233040000DD010000260000000000000000000000",
+    "decoded": {
+      "type": "02",
+      "UP_TIME": "0:19:00",
+      "MCU_Temp": -4.2,
+      "RSSI_Modem_Pend": 0,
+      "RSSI_Modem_Status": 0,
+      "RSSI_Current": 8,
+      "RSSI_Latch": 242,
+      "RSSI_Ant1": 0,
+      "RSSI_Ant2": 0,
+      "AFC_Freq_Offset": 34946,
+      "Tx_Packets": 1075,
+      "Rx_Packets": 477,
+      "RxPackets_CrcErr": 38,
+      "LastPhoenixModeTime": 0,
+      "LastNormalModeTime": 0
+    }
+  },
+  {
+    "timestamp": "2025-06-11 17:35:55",
+    "frame": "20C2330CD2BD871E",
+    "decoded": {
+      "type": "00",
+      "content": ""
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:05:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F0251101834332A9E7BC2200000000000000000000CFA505000000000000000000210000000000000001000000BC220000",
+    "decoded": {
+      "type": "03",
+      "ConOpsMode": "E7A9",
+      "POR": 8892,
+      "MAC_Collisions": 0,
+      "MAC_fails": 0,
+      "GS_Handshakes": 370127,
+      "NvMWriteFails": 0,
+      "NvMReadFails": 0,
+      "NvMDefaultEntry": 33,
+      "IntFRAM_corruptions": 0,
+      "ExtFRAM_corruptions": 1,
+      "ExtFRAM_gone": 8892
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:05:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F0241101824332D0060000D8FF000008F2000088827D03000080020000270000000000000000000000",
+    "decoded": {
+      "type": "02",
+      "UP_TIME": "0:29:04",
+      "MCU_Temp": -4.0,
+      "RSSI_Modem_Pend": 0,
+      "RSSI_Modem_Status": 0,
+      "RSSI_Current": 8,
+      "RSSI_Latch": 242,
+      "RSSI_Ant1": 0,
+      "RSSI_Ant2": 0,
+      "AFC_Freq_Offset": 34946,
+      "Tx_Packets": 893,
+      "Rx_Packets": 640,
+      "RxPackets_CrcErr": 39,
+      "LastPhoenixModeTime": 0,
+      "LastNormalModeTime": 0
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:04:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F0231101834332A9E7BC2200000000000000000000CFA505000000000000000000210000000000000001000000BC220000",
+    "decoded": {
+      "type": "03",
+      "ConOpsMode": "E7A9",
+      "POR": 8892,
+      "MAC_Collisions": 0,
+      "MAC_fails": 0,
+      "GS_Handshakes": 370127,
+      "NvMWriteFails": 0,
+      "NvMReadFails": 0,
+      "NvMDefaultEntry": 33,
+      "IntFRAM_corruptions": 0,
+      "ExtFRAM_corruptions": 1,
+      "ExtFRAM_gone": 8892
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:04:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F022110182433294060000D6FF000008F2000088827B03000080020000270000000000000000000000",
+    "decoded": {
+      "type": "02",
+      "UP_TIME": "0:28:04",
+      "MCU_Temp": -4.2,
+      "RSSI_Modem_Pend": 0,
+      "RSSI_Modem_Status": 0,
+      "RSSI_Current": 8,
+      "RSSI_Latch": 242,
+      "RSSI_Ant1": 0,
+      "RSSI_Ant2": 0,
+      "AFC_Freq_Offset": 34946,
+      "Tx_Packets": 891,
+      "Rx_Packets": 640,
+      "RxPackets_CrcErr": 39,
+      "LastPhoenixModeTime": 0,
+      "LastNormalModeTime": 0
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:03:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F0211101834332A9E7BC2200000000000000000000CFA505000000000000000000210000000000000001000000BC220000",
+    "decoded": {
+      "type": "03",
+      "ConOpsMode": "E7A9",
+      "POR": 8892,
+      "MAC_Collisions": 0,
+      "MAC_fails": 0,
+      "GS_Handshakes": 370127,
+      "NvMWriteFails": 0,
+      "NvMReadFails": 0,
+      "NvMDefaultEntry": 33,
+      "IntFRAM_corruptions": 0,
+      "ExtFRAM_corruptions": 1,
+      "ExtFRAM_gone": 8892
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:03:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F020110182433258060000D6FF000008F2000088827903000080020000270000000000000000000000",
+    "decoded": {
+      "type": "02",
+      "UP_TIME": "0:27:04",
+      "MCU_Temp": -4.2,
+      "RSSI_Modem_Pend": 0,
+      "RSSI_Modem_Status": 0,
+      "RSSI_Current": 8,
+      "RSSI_Latch": 242,
+      "RSSI_Ant1": 0,
+      "RSSI_Ant2": 0,
+      "AFC_Freq_Offset": 34946,
+      "Tx_Packets": 889,
+      "Rx_Packets": 640,
+      "RxPackets_CrcErr": 39,
+      "LastPhoenixModeTime": 0,
+      "LastNormalModeTime": 0
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:02:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F01F1101834332A9E7BC2200000000000000000000CFA505000000000000000000210000000000000001000000BC220000",
+    "decoded": {
+      "type": "03",
+      "ConOpsMode": "E7A9",
+      "POR": 8892,
+      "MAC_Collisions": 0,
+      "MAC_fails": 0,
+      "GS_Handshakes": 370127,
+      "NvMWriteFails": 0,
+      "NvMReadFails": 0,
+      "NvMDefaultEntry": 33,
+      "IntFRAM_corruptions": 0,
+      "ExtFRAM_corruptions": 1,
+      "ExtFRAM_gone": 8892
+    }
+  },
+  {
+    "timestamp": "2025-06-09 18:02:23",
+    "frame": "8AA68EA66062E0A6A664626862E103F01E11018243321C060000D6FF000008F2000088827703000080020000270000000000000000000000",
+    "decoded": {
+      "type": "02",
+      "UP_TIME": "0:26:04",
+      "MCU_Temp": -4.2,
+      "RSSI_Modem_Pend": 0,
+      "RSSI_Modem_Status": 0,
+      "RSSI_Current": 8,
+      "RSSI_Latch": 242,
+      "RSSI_Ant1": 0,
+      "RSSI_Ant2": 0,
+      "AFC_Freq_Offset": 34946,
+      "Tx_Packets": 887,
+      "Rx_Packets": 640,
+      "RxPackets_CrcErr": 39,
+      "LastPhoenixModeTime": 0,
+      "LastNormalModeTime": 0
+    }
+  },
+  {
     "timestamp": "2025-06-06 17:57:28",
     "frame": "8AA68EA66062E0A6A664626862E103F0251101834332A9E7A922000000000000000000007EA005000000000000000000210000000000000001000000A9220000",
     "decoded": {

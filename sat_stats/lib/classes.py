@@ -99,7 +99,7 @@ class satellite_data:
                 raise ValueError("=> Nenhum dado foi extraído da tabela.")
 
             # Organização das pastas: os.path/data/sat_<id>/<ano-mês>/telemetry
-            sat_folder = f"sat_stats/data/sat_{self.sat_id}/"
+            sat_folder = f"data/sat_{self.sat_id}/"
             year_month = self.time_init[:7]
             save_folder = os.path.join(sat_folder, year_month, 'telemetry')
             os.makedirs(save_folder, exist_ok=True)
@@ -183,7 +183,7 @@ class satellite_data:
         print("===========================================================================================")
         print(f"============                 GERANDO GRÁFICOS DO SATÉLITE {self.sat_id}                   ============")
         print("===========================================================================================")
-        path_base = f"sat_stats/data/sat_{self.sat_id}/"
+        path_base = f"data/sat_{self.sat_id}/"
 
         # Procurar arquivos de status sat_stats/data/sat_19/2025-05/
         arquivos = self.search_files(self.args, 'status', 'json')
@@ -203,23 +203,27 @@ class satellite_data:
             arquivos = [arquivos[int(i)] for i in select_files.split(',') if i.isdigit() and 0 <= int(i) < len(arquivos)]
 
         print("===========================================================================================")
-        print(f"=> Arquivos selecionados para processamento:\n{arquivos}")
-        print("===========================================================================================")
         # === 1. Carregar dados dos arquivos JSON ===
         beacons = []
         for arq in arquivos:
-            path_name = f"{path_base}{arq[22:30]}graphs/"
+            prefix = arq[27:55]
+            print(f"=> Processando arquivo: {arq}")
+            # Cria o diretório para os gráficos, se não existir
+            path_name = f"{path_base}{prefix[:7]}/graphs/"
             os.makedirs(path_name, exist_ok=True)
             with open(arq, "r") as f:
                 beacons.extend(json.load(f))
 
-            prefix = arq[37:65]
 
             # === 2. Filtrar e preparar dados de tipo 02 (UHF Stats) ===
             uhf_stats = [b for b in beacons if b["decoded"].get("type") == "02"]
             print(f"=> Número de beacons do tipo 02 (UHF Stats): {len(uhf_stats)}")
             print("===========================================================================================")
 
+            if not uhf_stats:
+                print("=> Nenhum dado do tipo 02 (UHF Stats) encontrado.")
+                continue
+            
             # Criar DataFrame
             df = pd.DataFrame([{
                 "timestamp": pd.to_datetime(b["timestamp"]),
@@ -394,3 +398,4 @@ class satellite_data:
             plt.savefig(f"{path_name}{prefix}_graph_handshakes.png")
 
             print(f"=> Gráficos salvos com sucesso em:\n{path_name}.")
+            print("===========================================================================================")
