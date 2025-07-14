@@ -38,9 +38,8 @@ sat_stats/
 │           │   └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_graph_por.png
 │           └── report/
 │               └── <Initial date (Y-m-d)>_<Final date (Y-m-d)>_sat-<id>_report.pdf
-└── lib/
-    ├── collect_data.py
-    ├── beacon_reader.py
-    ├── beacon_saver.py
-    └── sattelite_report.py
+├── lib/
+│   ├── classes.py
+│   └── utils.py
+└── sat_stats.py
 ```
