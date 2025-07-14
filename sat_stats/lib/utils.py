@@ -52,7 +52,7 @@ def get_user_inputs(args):
         if not args.time_end:
             while True:
                 try:
-                    args.time_end = input("=> Informe a data final (YYYY-MM-DD): ")
+                    args.time_end = input("=> Digite a data final (YYYY-MM-DD): ")
                     pd.to_datetime(args.time_end, format='%Y-%m-%d')
                     break
                 except ValueError:
